@@ -1454,3 +1454,116 @@ footer
     background: #f44336;
     color: white;
 }
+
+/* Our Services Section Redesign */
+.about .ser {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 8rem 0;
+    background: linear-gradient(135deg, #1a1f2c 0%, #2d364d 100%);
+}
+
+.about .box-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 4rem;
+    padding: 0 5rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.about .box-container .box {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 2.5rem;
+    padding: 4rem 3rem;
+    text-align: center;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+}
+
+.about .box-container .box:hover {
+    transform: translateY(-15px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(110, 138, 60, 0.5);
+}
+
+.about .box-container .box::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at top right, 
+        rgba(110, 138, 60, 0.2), 
+        transparent 70%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.about .box-container .box:hover::before {
+    opacity: 1;
+}
+
+.about .box-container .box img {
+    height: 8rem;
+    margin-bottom: 2.5rem;
+    transition: all 0.4s ease;
+    filter: brightness(0.9) saturate(1.2);
+}
+
+.about .box-container .box:hover img {
+    transform: scale(1.15) rotate(5deg);
+    filter: brightness(1.1) saturate(1.4);
+}
+
+.about .box-container .box h3 {
+    font-size: 2.4rem;
+    color: #8BC34A;
+    margin-bottom: 2rem;
+    position: relative;
+    padding-bottom: 1.5rem;
+    font-weight: 600;
+}
+
+.about .box-container .box h3::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, #8BC34A, #6E8A3C);
+    border-radius: 3px;
+}
+
+.about .box-container .box p {
+    font-size: 1.6rem;
+    color: #d1d1d1;
+    line-height: 1.9;
+    margin-top: 2rem;
+    transition: color 0.3s ease;
+}
+
+.about .box-container .box:hover p {
+    color: #ffffff;
+}
+
+@media (max-width: 768px) {
+    .about .box-container {
+        padding: 0 2rem;
+        gap: 3rem;
+    }
+    
+    .about .box-container .box {
+        padding: 3rem 2rem;
+    }
+    
+    .about .box-container .box h3 {
+        font-size: 2.2rem;
+    }
+}
