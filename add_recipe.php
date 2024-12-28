@@ -35,7 +35,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         
         // Create directory if it doesn't exist
         if (!file_exists($target_dir)) {
-            if (!mkdir($target_dir, 0777, true)) {
+            // Set more permissive permissions for directory creation
+            if (!mkdir($target_dir, 0755, true)) {
                 error_log("Failed to create directory: " . $target_dir);
                 $_SESSION['error_message'] = "Failed to create upload directory";
                 header('Location: community-cookbook.php');
@@ -43,10 +44,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
         }
 
-        // Check directory permissions
+        // Add debug logging for directory permissions
+        error_log("Directory permissions: " . substr(sprintf('%o', fileperms($target_dir)), -4));
+        
+        // Check directory permissions - use less permissive permissions
         if (!is_writable($target_dir)) {
             error_log("Directory not writable: " . $target_dir);
-            chmod($target_dir, 0777);
+            chmod($target_dir, 0755);  // Changed from 0777 to 0755
         }
 
         // Get file extension
@@ -59,6 +63,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $target_file = $target_dir . $unique_filename;
 
             error_log("Attempting to move file to: " . $target_file);
+
+            // Add debug logging for file upload attempt
+            error_log("Upload file temp name: " . $_FILES['image']['tmp_name']);
+            error_log("Target file location: " . $target_dir . $unique_filename);
 
             // Move uploaded file
             if (move_uploaded_file($_FILES['image']['tmp_name'], $target_file)) {
