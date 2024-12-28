@@ -156,10 +156,10 @@ session_start();
             <div class="video-grid">
                 <div class="video-card">
                     <div class="video-thumbnail">
-                        <img src="img/knife-skills-video.j" alt="Knife Skills Tutorial">
-                        <div class="play-button">
+                        <img src="img/knife-skills.jpg" alt="Knife Skills Tutorial">
+                        <a href="https://www.youtube.com/watch?v=YrHpeEwk_-U&t" class="play-button">
                             <i class="fas fa-play"></i>
-                        </div>
+                        </a>
                         <span class="duration">15:30</span>
                     </div>
                     <div class="video-content">
@@ -173,10 +173,10 @@ session_start();
                 </div>
                 <div class="video-card">
                     <div class="video-thumbnail">
-                        <img src="img/sauce-basics.jpg" alt="Sauce Making">
-                        <div class="play-button">
+                        <img src="img/sauce.jpg" alt="Sauce Making">
+                        <a href="https://www.youtube.com/watch?v=LpalC9v8ffQ" class="play-button">
                             <i class="fas fa-play"></i>
-                        </div>
+                        </a>
                         <span class="duration">12:45</span>
                     </div>
                     <div class="video-content">
@@ -200,7 +200,7 @@ session_start();
                     <div class="infographic-content">
                         <h3>Measurement Conversions</h3>
                         <p>Quick reference guide for kitchen measurements</p>
-                        <a href="#" class="download-btn">
+                        <a href="downloads/MeasurementConversion.pdf" class="download-btn">
                             <i class="fas fa-download"></i> Download PDF
                         </a>
                     </div>
@@ -210,7 +210,7 @@ session_start();
                     <div class="infographic-content">
                         <h3>Cooking Times Guide</h3>
                         <p>Standard cooking times for common ingredients</p>
-                        <a href="#" class="download-btn">
+                        <a href="downloads/cooking.pdf" class="download-btn">
                             <i class="fas fa-download"></i> Download PDF
                         </a>
                     </div>
