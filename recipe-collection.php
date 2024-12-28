@@ -27,7 +27,11 @@ session_start();
         <nav class="navbar">
             <a href="index.php">Home</a>
             <a href="recipe-collection.php">Recipe Collection</a>
-            <a href="community-cookbook.php">Community Cookbook</a>
+            <?php
+            if (isset($_SESSION['username'])) {
+                echo '<a href="community-cookbook.php">Community Cookbook</a>';
+            }
+            ?>
             <a href="culinary-resources.php">Culinary Resources</a>
             <a href="educational-resources.php">Educational Resources</a>
             <a href="about-us.php">About Us</a>
@@ -110,7 +114,8 @@ session_start();
                     </div>
                     <div class="recipe-content">
                         <h3>Corn Dog</h3>
-                        <p class="recipe-description">A classic American corn dog with a crispy exterior and soft interior.</p>
+                        <p class="recipe-description">A classic American corn dog with a crispy exterior and soft
+                            interior.</p>
                         <div class="recipe-actions">
                             <a href="https://www.fifteenspatulas.com/homemade-corn-dogs/" class="recipe-btn">
                                 <i class="far fa-newspaper"></i> Recipe
@@ -200,9 +205,11 @@ session_start();
                     </div>
                     <div class="recipe-content">
                         <h3>Pasta</h3>
-                        <p class="recipe-description">A creamy pasta dish with sardines, olives, and garlicky breadcrumbs.</p>
+                        <p class="recipe-description">A creamy pasta dish with sardines, olives, and garlicky
+                            breadcrumbs.</p>
                         <div class="recipe-actions">
-                            <a href="https://www.kitchenstories.com/en/recipes/sardine-pasta-with-olives-and-garlicky-breadcrumbss" class="recipe-btn">
+                            <a href="https://www.kitchenstories.com/en/recipes/sardine-pasta-with-olives-and-garlicky-breadcrumbss"
+                                class="recipe-btn">
                                 <i class="far fa-newspaper"></i> Recipe
                             </a>
                             <a href="https://www.youtube.com/watch?v=EnXb1u9UoBU" class="recipe-btn">

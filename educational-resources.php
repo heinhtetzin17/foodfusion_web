@@ -25,7 +25,11 @@ session_start();
         <nav class="navbar">
             <a href="index.php">Home</a>
             <a href="recipe-collection.php">Recipe Collection</a>
-            <a href="community-cookbook.php">Community Cookbook</a>
+            <?php
+            if (isset($_SESSION['username'])) {
+                echo '<a href="community-cookbook.php">Community Cookbook</a>';
+            }
+            ?>
             <a href="culinary-resources.php">Culinary Resources</a>
             <a href="educational-resources.php">Educational Resources</a>
             <a href="about-us.php">About Us</a>

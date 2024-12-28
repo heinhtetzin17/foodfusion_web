@@ -54,6 +54,17 @@ ini_set('display_errors', 1);
     <section class="community-cookbook" id="community-cookbook">
         <h1 class="heading">Community Cookbook</h1>
 
+        <?php 
+        if(isset($_SESSION['error_message'])) {
+            echo '<div class="alert alert-danger">' . $_SESSION['error_message'] . '</div>';
+            unset($_SESSION['error_message']);
+        }
+        if(isset($_SESSION['success_message'])) {
+            echo '<div class="alert alert-success">' . $_SESSION['success_message'] . '</div>';
+            unset($_SESSION['success_message']);
+        }
+        ?>
+
         <?php if (isset($_SESSION['username'])): ?>
             <div class="add-recipe-btn" data-aos="fade-up">
                 <a href="#" class="btn" onclick="showAddRecipeForm()">Share Your Recipe</a>
@@ -66,7 +77,10 @@ ini_set('display_errors', 1);
             <?php
              
                 //Fetch recipes from the database
-                $query = "SELECT * FROM recipes";
+                $query = "SELECT r.*, u.username as author_name 
+                          FROM recipes r 
+                          JOIN users u ON r.author = u.id 
+                          ORDER BY r.date DESC";
                 $result = mysqli_query($conn, $query);
                
                
@@ -81,7 +95,7 @@ ini_set('display_errors', 1);
                             // Add checks for required fields
                             $image = !empty($recipe['image']) ? htmlspecialchars($recipe['image']) : 'img/default-recipe.jpg';
                             $title = htmlspecialchars($recipe['title']);
-                            $author = htmlspecialchars($recipe['author']);
+                            $author = htmlspecialchars($recipe['author_name']);
                             $description = htmlspecialchars($recipe['description']);
                             $category = htmlspecialchars($recipe['category']);
                             $likes = intval($recipe['likes']);

@@ -9,32 +9,78 @@ if (!isset($_SESSION['username'])) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Get user ID from session
+    $query = "SELECT id FROM users WHERE username = ?";
+    $stmt = mysqli_prepare($conn, $query);
+    mysqli_stmt_bind_param($stmt, "s", $_SESSION['username']);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    $user = mysqli_fetch_assoc($result);
+    $author_id = $user['id'];
+
     // Get form data
     $title = mysqli_real_escape_string($conn, $_POST['title']);
     $description = mysqli_real_escape_string($conn, $_POST['description']);
     $category = mysqli_real_escape_string($conn, $_POST['category']);
-    $author = $_SESSION['username'];
     $date = date('Y-m-d H:i:s');
 
     // Handle image upload
-    $target_dir = "uploads/recipes/";
-    if (!file_exists($target_dir)) {
-        mkdir($target_dir, 0777, true);
-    }
-
     $image_path = '';
     if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
+        // Debug information
+        error_log("File upload started");
+        error_log("Upload info: " . print_r($_FILES['image'], true));
+
+        $target_dir = "uploads/recipes/";
+        
+        // Create directory if it doesn't exist
+        if (!file_exists($target_dir)) {
+            if (!mkdir($target_dir, 0777, true)) {
+                error_log("Failed to create directory: " . $target_dir);
+                $_SESSION['error_message'] = "Failed to create upload directory";
+                header('Location: community-cookbook.php');
+                exit();
+            }
+        }
+
+        // Check directory permissions
+        if (!is_writable($target_dir)) {
+            error_log("Directory not writable: " . $target_dir);
+            chmod($target_dir, 0777);
+        }
+
+        // Get file extension
         $file_extension = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
         $allowed_extensions = array('jpg', 'jpeg', 'png', 'gif');
 
         if (in_array($file_extension, $allowed_extensions)) {
+            // Create unique filename
             $unique_filename = uniqid() . '.' . $file_extension;
             $target_file = $target_dir . $unique_filename;
 
+            error_log("Attempting to move file to: " . $target_file);
+
+            // Move uploaded file
             if (move_uploaded_file($_FILES['image']['tmp_name'], $target_file)) {
                 $image_path = $target_file;
+                error_log("File successfully uploaded to: " . $image_path);
+            } else {
+                $upload_error = error_get_last();
+                error_log("Failed to move uploaded file. PHP Error: " . print_r($upload_error, true));
+                $_SESSION['error_message'] = "Failed to upload image. Please check file permissions.";
+                header('Location: community-cookbook.php');
+                exit();
             }
+        } else {
+            $_SESSION['error_message'] = "Invalid file type. Only JPG, JPEG, PNG & GIF files are allowed.";
+            header('Location: community-cookbook.php');
+            exit();
         }
+    } else {
+        error_log("File upload error code: " . $_FILES['image']['error']);
+        $_SESSION['error_message'] = "No file uploaded or upload error occurred.";
+        header('Location: community-cookbook.php');
+        exit();
     }
 
     // Insert recipe into database
@@ -42,16 +88,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
               VALUES (?, ?, ?, ?, ?, ?, 0)";
     
     $stmt = mysqli_prepare($conn, $query);
-    mysqli_stmt_bind_param($stmt, "ssssss", $title, $description, $category, $image_path, $author, $date);
+    mysqli_stmt_bind_param($stmt, "ssssss", $title, $description, $category, $image_path, $author_id, $date);
 
     if (mysqli_stmt_execute($stmt)) {
         $_SESSION['success_message'] = "Recipe shared successfully!";
         header('Location: community-cookbook.php');
         exit();
     } else {
-        $_SESSION['error_message'] = "Error sharing recipe. Please try again.";
+        $_SESSION['error_message'] = "Error sharing recipe: " . mysqli_error($conn);
         header('Location: community-cookbook.php');
         exit();
     }
 }
+
+// If not POST request, redirect to community cookbook
+header('Location: community-cookbook.php');
+exit();
 ?>
